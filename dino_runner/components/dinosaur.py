@@ -1,68 +1,75 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import DUCKING, RUNNING, JUMPING
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING
 
-
-JUMPING_ACTION = "jumping"
-RUNNING_ACTION = "running"
-DUCKING_ACTION = "ducking"
 class Dinosaur(Sprite):
-    Y_POS = 310
     X_POS = 80
-    JUMP_VELOCITY = 8.5
-    DUCKING_VELOCITY = 8.5
+    Y_POS = 310
+    JUMP_SPEED = 6
     def __init__(self):
         self.image = RUNNING[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = self.X_POS
-        self.rect.y = self.Y_POS
-        self.step = 0
-        self.jump_velocity = self.JUMP_VELOCITY
-        self.ducking_velocity = self.DUCKING_VELOCITY
-        self.action = RUNNING_ACTION
-
-
-    def update(self, user_input):
-        if self.action == RUNNING_ACTION:
-            self.run()
-        elif self.action == JUMPING_ACTION:
-            self.jump()
-        elif self.action == DUCKING_ACTION:
-            self.duck()
-        if self.action != JUMPING_ACTION:
-            if user_input[pygame.K_UP]: 
-                self.action = JUMPING_ACTION
-            else:
-                self.action = RUNNING_ACTION
-
-        elif self.action == DUCKING_ACTION:
-            if user_input[pygame.K_DOWN]:
-                self.action = DUCKING_ACTION
-                
-        if self.step >= 9:
-            self.step = 0
-
-    def run (self):
-        self.image = RUNNING[0] if self.step < 5 else RUNNING[1]
-        self.step += 1
+        self.dino_rect = self.image.get_rect()
+        self.dino_rect.x = self.X_POS
+        self.dino_rect.y= self.Y_POS
+        self.step_index = 0
+        self.dino_run = True
+        self.jump_speed = self.JUMP_SPEED
+        self.dino_jump = False
+        self.dino_duck = False
+        
     
-    def jump (self):
-        self.image = JUMPING
-        self.rect.y -= self.jump_velocity * 4
-        self.jump_velocity -= 0.8
-        if self.jump_velocity < -self.JUMP_VELOCITY:
-            self.rect.y = self.Y_POS
-            self.jump_velocity = self.JUMP_VELOCITY
-            self.action = RUNNING_ACTION    
+    def update(self, user_input):
+        if self.dino_run:
+            self.run()
+        elif self.dino_jump:
+            self.jump()
+
+        elif self.dino_duck:
+            self.duck()
+
+        if user_input[pygame.K_UP] and not self.dino_jump:
+            self.dino_jump = True
+            self.dino_run = False
+        elif not self.dino_jump:
+            self.dino_jump = False
+            self.dino_run = True
+
+
+        if user_input[pygame.K_DOWN]:
+            self.dino_duck=True
+            self.dino_run=False
+            
+        
+        if self.step_index >= 10:
+            self.step_index = 0
+
+
+    def run(self):
+        self.image = RUNNING[0] if self.step_index < 5 else RUNNING[1]
+        self.dino_rect = self.image.get_rect()
+        self.dino_rect.x =  self.X_POS
+        self.dino_rect.y = self.Y_POS
+        self.step_index += 1
+
+    def jump(self):
+            self.image = JUMPING
+            self.dino_rect.y -=self.jump_speed * 4
+            self.jump_speed -= 0.5
+
+            if self.jump_speed < -self.JUMP_SPEED:
+                self.dino_rect.y = self.Y_POS
+                self.dino_jump=False
+                self.jump_speed = self.JUMP_SPEED
+
 
     def duck(self):
-        self.image = DUCKING[0] if self.step < 5 else DUCKING[1]
-        self.rect.y -= self.ducking_velocity * 4
-        self.ducking_velocity -= 0.8
-        if self.ducking_velocity < -self.DUCKING_VELOCITY:
-            self.rect.y = self.Y_POS
-            self.ducking_velocity = self.DUCKING_VELOCITY
-            self.action = RUNNING_ACTION   
+        self.image = DUCKING[0] if self.step_index < 5 else DUCKING[1]
+        self.dino_rect = self.image.get_rect()
+        self.dino_rect.x =  self.X_POS
+        self.dino_rect.y = self.Y_POS +26
+        self.step_index += 1
+
 
     def draw(self, screen):
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+            screen.blit(self.image, (self.dino_rect.x , self.dino_rect.y))
+ 
