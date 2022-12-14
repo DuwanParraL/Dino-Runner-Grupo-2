@@ -11,13 +11,13 @@ class ObstacleManager:
 
     def obstacle_generate(self, obstacle_type):
         if obstacle_type == 0:
-            cactus_type = SMALL_CACTUS
+            cactus_type = 'SMALL'
             obstacle = Cactus(cactus_type)
         else:
-            cactus_type2 = LARGE_CACTUS
+            cactus_type2 = 'LARGE'
             obstacle = Cactus(cactus_type2)
 
-            return obstacle
+        return obstacle
 
     def update(self, game):
         if len(self.obstacles) == 0:
@@ -28,8 +28,10 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if obstacle.rect.colliderect(game.player.rect):
-                pygame.time.delay(500)
+                pygame.time.delay(1000)
                 game.playing = False
+                break
+           
 
     def draw(self, screen):
         for obstacle in self.obstacles:

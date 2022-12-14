@@ -23,7 +23,7 @@ class Game:
         self.obstacle_manager = ObstacleManager()
 
     def run(self):
-        # Game loop: events - update - draw
+        
         self.playing = True
         while self.playing:
             self.events()
