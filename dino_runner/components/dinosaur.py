@@ -19,6 +19,7 @@ class Dinosaur(Sprite):
         self.step = 0
         self.jump_velocity = self.JUMP_VELOCITY
         self.action = RUNNING_ACTION
+        self.soundJump = pygame.mixer.Sound("sound/saltoDino.mp3")
 
 
     def update(self, user_input):
@@ -32,6 +33,7 @@ class Dinosaur(Sprite):
         if self.action != JUMPING_ACTION:
             if user_input[pygame.K_UP]: 
                 self.action = JUMPING_ACTION
+                self.soundJump.play()
             else:
                 self.action = RUNNING_ACTION
 
