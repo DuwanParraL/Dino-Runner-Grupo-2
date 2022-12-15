@@ -6,12 +6,12 @@ class Cactus(Obstacle):
     CACTUS = {
         'LARGE': (LARGE_CACTUS, 300),
         'SMALL': (SMALL_CACTUS, 325),
-    }
+        }
     
     def __init__(self, cactus_type):
-        image,cactus_pos = self.CACTUS[cactus_type]
+        images,cactus_size = self.CACTUS[cactus_type]
         cactus_type = randint(0,2)
-        super().__init__(image[cactus_type])
-        self.rect.y = cactus_pos
+        super().__init__(images[cactus_type])
+        self.rect.y = cactus_size
 
     
