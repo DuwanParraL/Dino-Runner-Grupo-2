@@ -1,3 +1,4 @@
+from cgi import print_environ_usage
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
@@ -24,8 +25,10 @@ class Game:
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.score = Score()
+        self.total_point = 0
         self.death_count = 0
         self.executing = False
+        
     
     
     def execute(self):
@@ -80,19 +83,19 @@ class Game:
         self.x_pos_bg -= self.game_speed
 
     def show_menu(self):
-        self.screen.fill((255, 250, 250)) 
+        self.screen.fill((255, 250, 205)) 
         half_screen_width = SCREEN_WIDTH // 2 
         half_screen_height = SCREEN_HEIGHT // 2
         
         if self.death_count == 0:
-            font = pygame.font.Font(FONT_STYLE, 30)
-            message = font.render("Press any key to start.", True, (0, 0, 0))
-            message_rect = message.get_rect()
-            message_rect.center = (half_screen_width, half_screen_height)
-            self.screen.blit(message, message_rect)
+            self.print_message("Press any key to start.", half_screen_width, half_screen_height)
         else:
-            print(self.death_count)
-        self.screen.blit(DINO_START, (half_screen_width - 40, half_screen_height - 120))        
+            self.print_message("Press any key to start.", half_screen_width, half_screen_height)
+            self.print_message(f"Your score: {self.score.points}", half_screen_width, half_screen_height + 50)
+            self.print_message(f"best score: {self.total_point}", half_screen_width, half_screen_height  + 100)
+            self.print_message(f"total dies: {self.death_count}",half_screen_width , half_screen_height + 150)
+            
+        self.screen.blit(DINO_START, (half_screen_width - 40, half_screen_height - 140))        
         
         pygame.display.update()        
         
@@ -102,5 +105,21 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.executing = False
-            elif event.type == pygame.KEYDOWN:
+            elif (event.type == pygame.KEYDOWN) and (event.type != pygame.K_TAB):
+                self.score.points = 0
+                self.game_speed = 20
                 self.run()
+            elif event.type == pygame.K_TAB:
+                self.death_count = 0
+                self.run()
+
+    def print_message(self, frase, x_pos_message, y_pos_message):
+        font = pygame.font.Font(FONT_STYLE, 30)
+        message = font.render(frase, True, (0, 0, 0))
+        message_rect = message.get_rect()
+        message_rect.center = (x_pos_message, y_pos_message)
+        self.screen.blit(message, message_rect)
+
+    def uptade_score(self):
+        if self.score.points > self.total_point:
+            self.total_point = self.score
