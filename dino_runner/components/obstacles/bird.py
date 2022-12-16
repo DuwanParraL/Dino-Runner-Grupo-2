@@ -5,7 +5,7 @@ from random import randint
 class Bird(Obstacle):
     def __init__(self):
         super().__init__(BIRD[0])
-        self.rect.y = randint(200, 330)
+        self.rect.y = randint(100, 250)
         self.step = 0
 
     def draw(self, screen):

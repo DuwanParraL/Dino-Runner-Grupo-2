@@ -31,6 +31,7 @@ class Game:
         self.heart_manager = Heart()
         self.hearts = 3
         self.soundJump = pygame.mixer.Sound("sound/die.wav")
+       
 
     def execute(self):
         self.executing = True
@@ -88,7 +89,7 @@ class Game:
 
 
     def show_menu(self):
-        self.screen.fill((22, 118, 214))
+        self.screen.fill((221, 219, 203))
         if self.death_counts == 0:
             self.draw_image(DINO_START, 40, 150)
             self.menu_view('Press any key to start...', 0, -10)
@@ -129,4 +130,5 @@ class Game:
                 self.death_counts += 1
                 self.soundJump.play()
                 self.playing = False
+                
         return not has_shield
