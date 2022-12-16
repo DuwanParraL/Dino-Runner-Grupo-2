@@ -1,7 +1,7 @@
 import pygame
 
 
-from dino_runner.utils.constants import HEART,RESET
+from dino_runner.utils.constants import HEART
 
 class Heart():
     def __init__(self):
@@ -12,7 +12,7 @@ class Heart():
         
         
     def draw(self,screen,live):
-        f = 0
-        for i in range(0,live):
-            screen.blit(self.image, (self.image_rect.x + f, self.image_rect.y))
-            f += 30
+        separeishon = 0  #variable
+        for i in range(0,live):     #multiplica
+            screen.blit(self.image, (self.image_rect.x + separeishon, self.image_rect.y))
+            separeishon += 30   #separación

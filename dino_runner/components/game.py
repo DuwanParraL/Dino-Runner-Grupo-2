@@ -30,7 +30,7 @@ class Game:
         self.half_screen_height = SCREEN_HEIGHT // 2
         self.heart_manager = Heart()
         self.hearts = 3
-        
+        self.soundJump = pygame.mixer.Sound("sound/die.wav")
 
     def execute(self):
         self.executing = True
@@ -66,7 +66,7 @@ class Game:
 
     def draw(self):
         self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255)) #utilizar para hacer noche
+        self.screen.fill((255, 224, 0)) #utilizar para hacer noche
         self.draw_background()
         self.player.draw(self.screen)
         self.player.draw_active_power_up(self.screen)
@@ -88,7 +88,7 @@ class Game:
 
 
     def show_menu(self):
-        self.screen.fill((255, 255, 255))
+        self.screen.fill((22, 118, 214))
         if self.death_counts == 0:
             self.draw_image(DINO_START, 40, 150)
             self.menu_view('Press any key to start...', 0, -10)
@@ -127,6 +127,6 @@ class Game:
                 self.draw()
                 self.hearts 
                 self.death_counts += 1
+                self.soundJump.play()
                 self.playing = False
         return not has_shield
-        

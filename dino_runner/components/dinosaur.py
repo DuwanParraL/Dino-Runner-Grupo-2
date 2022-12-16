@@ -15,7 +15,7 @@ class Dinosaur(Sprite):
     Y_POS = 310
     Y_DUCK_POS = 345
     JUMP_VELOCITY = 8.5
-
+    
     def __init__(self):
         self.type = DEFAULT_TYPE
         self.image = RUN_IMG[self.type][0]
@@ -29,6 +29,8 @@ class Dinosaur(Sprite):
         self.power_up_time_up = 0
         self.half_screen_width = SCREEN_WIDTH // 2
         self.half_screen_height = SCREEN_HEIGHT // 2
+        self.soundJump = pygame.mixer.Sound("sound/saltoDino.mp3")
+
 
     def reset_rect(self, y_pos=None):
         self.rect = self.image.get_rect()
@@ -46,6 +48,7 @@ class Dinosaur(Sprite):
         if self.action != JUMPING_ACTION:
             if user_input[pygame.K_UP]:
                 self.action = JUMPING_ACTION
+                self.soundJump.play()
                 
             elif user_input[pygame.K_DOWN]:
                 self.action = DUCKING_ACTION
