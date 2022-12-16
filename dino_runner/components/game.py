@@ -1,9 +1,11 @@
 import pygame
-from dino_runner.utils.constants import (BG,ICON,SCREEN_HEIGHT,SCREEN_WIDTH, TITLE, FPS, FONT_BOLD, DINO_START, RESET, GAME_OVER, SHIELD_TYPE,)
+from dino_runner.utils.constants import (BG,ICON,SCREEN_HEIGHT,SCREEN_WIDTH, TITLE, FPS, FONT_BOLD, DINO_START, RESET, GAME_OVER, SHIELD_TYPE,HEART)
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.obstacles.obstacle_manager import ObstacleManager 
 from dino_runner.components.score import Score
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
+
+from dino_runner.components.heart import Heart
 
 
 class Game:
@@ -26,6 +28,9 @@ class Game:
         self.death_counts = 0
         self.half_screen_width = SCREEN_WIDTH // 2
         self.half_screen_height = SCREEN_HEIGHT // 2
+        self.heart_manager = Heart()
+        self.hearts = 3
+        
 
     def execute(self):
         self.executing = True
@@ -35,10 +40,12 @@ class Game:
         pygame.quit()
 
     def run(self):
+        self.hearts = 3
         self.playing = True
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
         self.score.points = 0
+        
         while self.playing:
             self.events()
             self.update()
@@ -65,6 +72,7 @@ class Game:
         self.player.draw_active_power_up(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
+        self.heart_manager.draw(self.screen, self.hearts)
         self.score.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
@@ -113,6 +121,10 @@ class Game:
         has_shield = self.player.type == SHIELD_TYPE
         if not has_shield:
             self.draw()
-            self.death_counts += 1
-            self.playing = False
+            self.hearts -= 1
+            
+            if self.hearts == 0:
+                self.death_counts += 1
+                self.playing = False
         return not has_shield
+        
