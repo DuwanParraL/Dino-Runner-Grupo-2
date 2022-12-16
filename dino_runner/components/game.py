@@ -86,6 +86,7 @@ class Game:
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
 
+
     def show_menu(self):
         self.screen.fill((255, 255, 255))
         if self.death_counts == 0:
@@ -120,10 +121,11 @@ class Game:
     def on_death(self):
         has_shield = self.player.type == SHIELD_TYPE
         if not has_shield:
-            self.draw()
-            self.hearts -= 1
-            
-            if self.hearts == 0:
+            if self.hearts > 0:
+                self.hearts -= 1
+            else:
+                self.draw()
+                self.hearts 
                 self.death_counts += 1
                 self.playing = False
         return not has_shield
